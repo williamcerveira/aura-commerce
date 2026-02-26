@@ -1,19 +1,25 @@
-import { X, Minus, Plus, Trash2 } from "lucide-react";
+import { X, Minus, Plus, Trash2, MessageCircle } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 
+const WHATSAPP_PHONE = "5511999999999"; // Altere para o número da joalheria
+
 export default function CartDrawer() {
-  const { items, isOpen, closeCart, updateQuantity, removeItem, subtotal } = useCartStore();
+  const { items, isOpen, closeCart, updateQuantity, removeItem, subtotal, getWhatsAppLink } = useCartStore();
 
   if (!isOpen) return null;
 
   const formatPrice = (v: number) =>
     v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+  const handleCheckout = () => {
+    const link = getWhatsAppLink(WHATSAPP_PHONE);
+    window.open(link, "_blank");
+  };
+
   return (
     <div className="fixed inset-0 z-[70]" role="dialog" aria-modal="true" aria-label="Carrinho">
       <div className="absolute inset-0 bg-[hsl(var(--overlay))]" onClick={closeCart} />
       <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-background shadow-2xl animate-slide-in-right flex flex-col">
-        {/* Header */}
         <div className="flex items-center justify-between border-b border-border px-6 py-4">
           <h2 className="text-sm font-semibold tracking-[0.15em] uppercase">
             Carrinho ({items.reduce((s, i) => s + i.quantity, 0)})
@@ -23,7 +29,6 @@ export default function CartDrawer() {
           </button>
         </div>
 
-        {/* Items */}
         <div className="flex-1 overflow-y-auto px-6 py-4">
           {items.length === 0 ? (
             <p className="text-center text-muted-foreground text-sm mt-20">
@@ -85,15 +90,18 @@ export default function CartDrawer() {
           )}
         </div>
 
-        {/* Footer */}
         {items.length > 0 && (
           <div className="border-t border-border px-6 py-5 space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium uppercase tracking-wider">Subtotal</span>
               <span className="text-base font-semibold">{formatPrice(subtotal())}</span>
             </div>
-            <button className="w-full bg-primary text-primary-foreground py-3.5 text-sm font-semibold tracking-widest uppercase transition-opacity hover:opacity-90">
-              Finalizar Compra
+            <button
+              onClick={handleCheckout}
+              className="w-full bg-[hsl(142_70%_35%)] text-primary-foreground py-3.5 text-sm font-semibold tracking-widest uppercase transition-opacity hover:opacity-90 flex items-center justify-center gap-2"
+            >
+              <MessageCircle size={18} />
+              Finalizar pelo WhatsApp
             </button>
           </div>
         )}
