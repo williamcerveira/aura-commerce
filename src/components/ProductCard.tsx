@@ -2,7 +2,6 @@ import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Product } from "@/data/products";
 import { useWishlistStore } from "@/store/wishlist";
-import { useState } from "react";
 
 interface Props {
   product: Product;
@@ -11,42 +10,47 @@ interface Props {
 export default function ProductCard({ product }: Props) {
   const { toggle, has } = useWishlistStore();
   const isFav = has(product.id);
-  const [hovered, setHovered] = useState(false);
+  const hasSecondImage = product.images.length > 1;
 
   const formatPrice = (v: number) =>
     v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-
-  const displayImage =
-    hovered && product.images.length > 1 ? product.images[1] : product.images[0];
 
   return (
     <article className="group relative">
       <Link
         to={`/produto/${product.id}`}
-        className="block overflow-hidden bg-secondary"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        className="block overflow-hidden bg-secondary relative"
       >
         <img
-          src={displayImage}
+          src={product.images[0]}
           alt={product.name}
-          className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className={`aspect-square w-full object-cover transition-opacity duration-500 ${
+            hasSecondImage ? "group-hover:opacity-0" : "group-hover:scale-105 transition-transform"
+          }`}
           loading="lazy"
         />
+        {hasSecondImage && (
+          <img
+            src={product.images[1]}
+            alt={`${product.name} - foto 2`}
+            className="absolute inset-0 aspect-square w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            loading="lazy"
+          />
+        )}
         {product.isNew && (
-          <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-[10px] font-semibold tracking-widest uppercase px-2 py-1">
+          <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-[10px] font-semibold tracking-widest uppercase px-2 py-1 z-10">
             Novo
           </span>
         )}
         {product.isSale && (
-          <span className="absolute top-3 left-3 bg-sale text-sale-foreground text-[10px] font-semibold tracking-widest uppercase px-2 py-1">
+          <span className="absolute top-3 left-3 bg-sale text-sale-foreground text-[10px] font-semibold tracking-widest uppercase px-2 py-1 z-10">
             Promo
           </span>
         )}
       </Link>
       <button
         onClick={() => toggle(product.id)}
-        className="absolute top-3 right-3 p-1.5 bg-background/80 backdrop-blur-sm transition-colors"
+        className="absolute top-3 right-3 p-1.5 bg-background/80 backdrop-blur-sm transition-colors z-10"
         aria-label={isFav ? "Remover dos favoritos" : "Adicionar aos favoritos"}
       >
         <Heart size={16} fill={isFav ? "currentColor" : "none"} />
