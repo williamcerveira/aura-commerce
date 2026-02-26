@@ -9,7 +9,7 @@ const navLinks = [
   { label: "Colares", to: "/catalogo?category=colares" },
   { label: "Brincos", to: "/catalogo?category=brincos" },
   { label: "Pulseiras", to: "/catalogo?category=pulseiras" },
-  { label: "Sale", to: "/catalogo?filter=sale" },
+  { label: "Promoções", to: "/catalogo?filter=sale" },
 ];
 
 export default function Header() {
@@ -49,9 +49,7 @@ export default function Header() {
             <button className="p-2 hidden md:inline-flex" aria-label="Buscar">
               <Search size={20} />
             </button>
-            <Link to="/catalogo" className="p-2 hidden md:inline-flex" aria-label="Favoritos">
-              <Heart size={20} />
-            </Link>
+
             <button onClick={openCart} className="p-2 relative" aria-label="Carrinho">
               <ShoppingBag size={20} />
               {totalItems > 0 && (
