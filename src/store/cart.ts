@@ -22,6 +22,7 @@ interface CartState {
   totalItems: () => number;
   subtotal: () => number;
   clearCart: () => void;
+  getWhatsAppLink: (phone: string) => string;
 }
 
 export const useCartStore = create<CartState>((set, get) => ({
@@ -76,4 +77,23 @@ export const useCartStore = create<CartState>((set, get) => ({
   totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
   subtotal: () => get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
   clearCart: () => set({ items: [] }),
+
+  getWhatsAppLink: (phone: string) => {
+    const items = get().items;
+    const formatPrice = (v: number) =>
+      v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    
+    let msg = "🛍️ *Pedido - Aura Joias*\n\n";
+    items.forEach((item, i) => {
+      msg += `${i + 1}. *${item.name}*\n`;
+      msg += `   Tamanho: ${item.size} | Cor: ${item.color}\n`;
+      msg += `   Qtd: ${item.quantity} × ${formatPrice(item.price)} = ${formatPrice(item.price * item.quantity)}\n\n`;
+    });
+    msg += `───────────────\n`;
+    msg += `*Total: ${formatPrice(get().subtotal())}*\n\n`;
+    msg += `Gostaria de finalizar este pedido!`;
+
+    const encoded = encodeURIComponent(msg);
+    return `https://wa.me/${phone}?text=${encoded}`;
+  },
 }));

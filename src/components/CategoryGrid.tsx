@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import catFeminino from "@/assets/cat-feminino.jpg";
-import catMasculino from "@/assets/cat-masculino.jpg";
-import catAcessorios from "@/assets/cat-acessorios.jpg";
+import catAneis from "@/assets/cat-aneis.jpg";
+import catColares from "@/assets/cat-colares.jpg";
+import catBrincos from "@/assets/cat-brincos.jpg";
 
 const cats = [
-  { name: "Feminino", image: catFeminino, to: "/catalogo?gender=feminino" },
-  { name: "Masculino", image: catMasculino, to: "/catalogo?gender=masculino" },
-  { name: "Acessórios", image: catAcessorios, to: "/catalogo?category=acessorios" },
+  { name: "Anéis", image: catAneis, to: "/catalogo?category=aneis" },
+  { name: "Colares", image: catColares, to: "/catalogo?category=colares" },
+  { name: "Brincos", image: catBrincos, to: "/catalogo?category=brincos" },
 ];
 
 export default function CategoryGrid() {

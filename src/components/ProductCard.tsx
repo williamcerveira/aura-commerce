@@ -30,7 +30,7 @@ export default function ProductCard({ product }: Props) {
         <img
           src={displayImage}
           alt={product.name}
-          className="aspect-[3/4] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
         />
         {product.isNew && (
@@ -40,7 +40,7 @@ export default function ProductCard({ product }: Props) {
         )}
         {product.isSale && (
           <span className="absolute top-3 left-3 bg-sale text-sale-foreground text-[10px] font-semibold tracking-widest uppercase px-2 py-1">
-            Sale
+            Promo
           </span>
         )}
       </Link>
@@ -55,6 +55,7 @@ export default function ProductCard({ product }: Props) {
         <Link to={`/produto/${product.id}`}>
           <h3 className="text-sm font-medium leading-tight">{product.name}</h3>
         </Link>
+        <p className="text-xs text-muted-foreground">{product.material}</p>
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">{formatPrice(product.price)}</span>
           {product.originalPrice && (

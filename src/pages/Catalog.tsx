@@ -1,44 +1,38 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { products } from "@/data/products";
+import { products, categories } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import Footer from "@/components/Footer";
 import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
 
-const sizes = ["PP", "P", "M", "G", "GG"];
+const materialOptions = ["Ouro 18k", "Ouro Branco", "Ouro Rosé", "Prata 925"];
 const colorOptions = [
-  { name: "Preto", hex: "#1a1a1a" },
-  { name: "Branco", hex: "#ffffff" },
-  { name: "Bege", hex: "#c4b5a0" },
-  { name: "Cinza", hex: "#8c8c8c" },
+  { name: "Ouro 18k", hex: "#d4a843" },
+  { name: "Ouro Branco", hex: "#c0c0c0" },
+  { name: "Ouro Rosé", hex: "#b76e79" },
 ];
 
 type SortOption = "recent" | "price-asc" | "price-desc";
 
 export default function Catalog() {
   const [searchParams] = useSearchParams();
-  const gender = searchParams.get("gender");
+  const category = searchParams.get("category");
   const filter = searchParams.get("filter");
 
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [sort, setSort] = useState<SortOption>("recent");
 
-  const toggleSize = (s: string) =>
-    setSelectedSizes((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
   const toggleColor = (c: string) =>
     setSelectedColors((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
 
   const filtered = useMemo(() => {
     let list = [...products];
 
-    if (gender) list = list.filter((p) => p.gender === gender || p.gender === "unissex");
+    if (category) list = list.filter((p) => p.category === category);
     if (filter === "new") list = list.filter((p) => p.isNew);
     if (filter === "sale") list = list.filter((p) => p.isSale);
 
-    if (selectedSizes.length)
-      list = list.filter((p) => p.sizes.some((s) => selectedSizes.includes(s)));
     if (selectedColors.length)
       list = list.filter((p) => p.colors.some((c) => selectedColors.includes(c.name)));
 
@@ -46,20 +40,19 @@ export default function Catalog() {
     if (sort === "price-desc") list.sort((a, b) => b.price - a.price);
 
     return list;
-  }, [gender, filter, selectedSizes, selectedColors, sort]);
+  }, [category, filter, selectedColors, sort]);
 
-  const title = gender
-    ? gender.charAt(0).toUpperCase() + gender.slice(1)
+  const title = category
+    ? categories.find((c) => c.slug === category)?.name || "Catálogo"
     : filter === "new"
       ? "Novidades"
       : filter === "sale"
-        ? "Sale"
-        : "Todos os Produtos";
+        ? "Promoções"
+        : "Todas as Joias";
 
   return (
     <main className="min-h-screen">
       <div className="container py-6">
-        {/* Breadcrumbs */}
         <nav className="text-xs text-muted-foreground mb-6" aria-label="Breadcrumb">
           <a href="/" className="hover:text-foreground transition-colors">Home</a>
           <span className="mx-2">/</span>
@@ -69,7 +62,6 @@ export default function Catalog() {
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl md:text-3xl font-light tracking-tight">{title}</h1>
           <div className="flex items-center gap-4">
-            {/* Sort */}
             <div className="relative hidden md:block">
               <select
                 value={sort}
@@ -93,28 +85,25 @@ export default function Catalog() {
         </div>
 
         <div className="flex gap-10">
-          {/* Sidebar filters (desktop) */}
           <aside className="hidden md:block w-56 shrink-0 space-y-8">
             <div>
-              <h3 className="text-xs font-semibold tracking-[0.15em] uppercase mb-4">Tamanho</h3>
-              <div className="flex flex-wrap gap-2">
-                {sizes.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => toggleSize(s)}
-                    className={`border px-3 py-1.5 text-xs tracking-wider transition-colors ${
-                      selectedSizes.includes(s)
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border hover:border-foreground"
+              <h3 className="text-xs font-semibold tracking-[0.15em] uppercase mb-4">Categoria</h3>
+              <div className="flex flex-col gap-2">
+                {categories.map((c) => (
+                  <a
+                    key={c.slug}
+                    href={`/catalogo?category=${c.slug}`}
+                    className={`text-sm transition-colors ${
+                      category === c.slug ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    {s}
-                  </button>
+                    {c.name}
+                  </a>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="text-xs font-semibold tracking-[0.15em] uppercase mb-4">Cor</h3>
+              <h3 className="text-xs font-semibold tracking-[0.15em] uppercase mb-4">Metal</h3>
               <div className="flex flex-wrap gap-3">
                 {colorOptions.map((c) => (
                   <button
@@ -132,10 +121,9 @@ export default function Catalog() {
             </div>
           </aside>
 
-          {/* Product grid */}
           <div className="flex-1">
             <p className="text-xs text-muted-foreground mb-6">
-              {filtered.length} {filtered.length === 1 ? "produto" : "produtos"}
+              {filtered.length} {filtered.length === 1 ? "peça" : "peças"}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-10">
               {filtered.map((p) => (
@@ -144,14 +132,13 @@ export default function Catalog() {
             </div>
             {filtered.length === 0 && (
               <p className="text-center text-muted-foreground mt-20">
-                Nenhum produto encontrado.
+                Nenhuma peça encontrada.
               </p>
             )}
           </div>
         </div>
       </div>
 
-      {/* Mobile filter modal */}
       {filtersOpen && (
         <div className="fixed inset-0 z-[60] md:hidden" role="dialog" aria-modal="true">
           <div className="absolute inset-0 bg-[hsl(var(--overlay))]" onClick={() => setFiltersOpen(false)} />
@@ -161,7 +148,6 @@ export default function Catalog() {
               <button onClick={() => setFiltersOpen(false)}><X size={22} /></button>
             </div>
 
-            {/* Sort mobile */}
             <div className="mb-6">
               <h3 className="text-xs font-semibold tracking-[0.15em] uppercase mb-3">Ordenar</h3>
               <select
@@ -176,26 +162,7 @@ export default function Catalog() {
             </div>
 
             <div className="mb-6">
-              <h3 className="text-xs font-semibold tracking-[0.15em] uppercase mb-3">Tamanho</h3>
-              <div className="flex flex-wrap gap-2">
-                {sizes.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => toggleSize(s)}
-                    className={`border px-4 py-2 text-sm transition-colors ${
-                      selectedSizes.includes(s)
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border"
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="mb-6">
-              <h3 className="text-xs font-semibold tracking-[0.15em] uppercase mb-3">Cor</h3>
+              <h3 className="text-xs font-semibold tracking-[0.15em] uppercase mb-3">Metal</h3>
               <div className="flex flex-wrap gap-3">
                 {colorOptions.map((c) => (
                   <button

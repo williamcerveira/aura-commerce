@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
-import { Search, User, Heart, ShoppingBag, Menu, X } from "lucide-react";
+import { Search, Heart, ShoppingBag, Menu, X } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { useState } from "react";
 
 const navLinks = [
   { label: "Novidades", to: "/catalogo?filter=new" },
-  { label: "Feminino", to: "/catalogo?gender=feminino" },
-  { label: "Masculino", to: "/catalogo?gender=masculino" },
-  { label: "Acessórios", to: "/catalogo?category=acessorios" },
+  { label: "Anéis", to: "/catalogo?category=aneis" },
+  { label: "Colares", to: "/catalogo?category=colares" },
+  { label: "Brincos", to: "/catalogo?category=brincos" },
+  { label: "Pulseiras", to: "/catalogo?category=pulseiras" },
   { label: "Sale", to: "/catalogo?filter=sale" },
 ];
 
@@ -20,7 +21,6 @@ export default function Header() {
     <>
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="container flex h-14 items-center justify-between md:h-16">
-          {/* Mobile menu toggle */}
           <button
             onClick={() => setMobileOpen(true)}
             className="p-2 md:hidden"
@@ -29,12 +29,10 @@ export default function Header() {
             <Menu size={22} />
           </button>
 
-          {/* Logo */}
           <Link to="/" className="text-lg font-semibold tracking-[0.2em] uppercase md:text-xl">
-            Aura Apparel
+            Aura Joias
           </Link>
 
-          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8" aria-label="Navegação principal">
             {navLinks.map((link) => (
               <Link
@@ -47,13 +45,9 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Actions */}
           <div className="flex items-center gap-3">
             <button className="p-2 hidden md:inline-flex" aria-label="Buscar">
               <Search size={20} />
-            </button>
-            <button className="p-2 hidden md:inline-flex" aria-label="Conta">
-              <User size={20} />
             </button>
             <Link to="/catalogo" className="p-2 hidden md:inline-flex" aria-label="Favoritos">
               <Heart size={20} />
@@ -70,7 +64,6 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Mobile drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-[60]" role="dialog" aria-modal="true">
           <div

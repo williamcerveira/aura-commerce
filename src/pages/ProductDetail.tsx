@@ -21,7 +21,7 @@ export default function ProductDetail() {
   if (!product) {
     return (
       <div className="container py-20 text-center">
-        <p className="text-muted-foreground">Produto não encontrado.</p>
+        <p className="text-muted-foreground">Peça não encontrada.</p>
         <Link to="/catalogo" className="underline text-sm mt-4 inline-block">
           Voltar ao catálogo
         </Link>
@@ -48,20 +48,19 @@ export default function ProductDetail() {
   const isFav = has(product.id);
 
   const accordions = [
-    { key: "desc", label: "Descrição", content: product.details },
-    { key: "comp", label: "Composição e Cuidados", content: product.composition },
+    { key: "desc", label: "Detalhes da Peça", content: product.details },
+    { key: "comp", label: "Composição e Certificação", content: product.composition },
     {
       key: "ship",
-      label: "Frete e Devolução",
+      label: "Entrega e Garantia",
       content:
-        "Frete grátis para compras acima de R$ 299,00. Devolução gratuita em até 30 dias após o recebimento.",
+        "Entrega segura com seguro total. Garantia permanente contra defeitos de fabricação. Primeira limpeza e polimento gratuitos.",
     },
   ];
 
   return (
     <main className="min-h-screen">
       <div className="container py-6">
-        {/* Breadcrumbs */}
         <nav className="text-xs text-muted-foreground mb-6" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
           <span className="mx-2">/</span>
@@ -71,13 +70,12 @@ export default function ProductDetail() {
         </nav>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
-          {/* Gallery */}
           <div className="space-y-3">
             <div className="overflow-hidden bg-secondary">
               <img
                 src={product.images[activeImage]}
                 alt={product.name}
-                className="aspect-[3/4] w-full object-cover"
+                className="aspect-square w-full object-cover"
               />
             </div>
             {product.images.length > 1 && (
@@ -86,7 +84,7 @@ export default function ProductDetail() {
                   <button
                     key={i}
                     onClick={() => setActiveImage(i)}
-                    className={`w-20 aspect-[3/4] overflow-hidden border-2 transition-colors ${
+                    className={`w-20 aspect-square overflow-hidden border-2 transition-colors ${
                       activeImage === i ? "border-foreground" : "border-transparent"
                     }`}
                   >
@@ -97,9 +95,11 @@ export default function ProductDetail() {
             )}
           </div>
 
-          {/* Info */}
           <div className="space-y-6">
             <div>
+              <p className="text-xs text-muted-foreground tracking-widest uppercase mb-1">
+                {product.material}
+              </p>
               <h1 className="text-2xl md:text-3xl font-light tracking-tight">{product.name}</h1>
               <div className="flex items-center gap-3 mt-2">
                 <span className="text-lg font-medium">{formatPrice(product.price)}</span>
@@ -114,10 +114,9 @@ export default function ProductDetail() {
               </p>
             </div>
 
-            {/* Color selector */}
             <div>
               <h3 className="text-xs font-semibold tracking-[0.15em] uppercase mb-3">
-                Cor{selectedColor ? `: ${selectedColor}` : ""}
+                Metal{selectedColor ? `: ${selectedColor}` : ""}
               </h3>
               <div className="flex gap-3">
                 {product.colors.map((c) => (
@@ -135,11 +134,14 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            {/* Size selector */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-xs font-semibold tracking-[0.15em] uppercase">Tamanho</h3>
-                <button className="text-xs text-muted-foreground underline">Guia de tamanhos</button>
+                <h3 className="text-xs font-semibold tracking-[0.15em] uppercase">
+                  {product.category === "aneis" ? "Tamanho do Aro" : "Tamanho"}
+                </h3>
+                {product.category === "aneis" && (
+                  <button className="text-xs text-muted-foreground underline">Guia de medidas</button>
+                )}
               </div>
               <div className="flex flex-wrap gap-2">
                 {product.sizes.map((s) => (
@@ -158,7 +160,6 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            {/* CTA */}
             <div className="flex gap-3 pt-2">
               <button
                 onClick={handleAddToCart}
@@ -176,7 +177,6 @@ export default function ProductDetail() {
               </button>
             </div>
 
-            {/* Accordions */}
             <div className="border-t border-border pt-6 space-y-0">
               {accordions.map((acc) => (
                 <div key={acc.key} className="border-b border-border">
