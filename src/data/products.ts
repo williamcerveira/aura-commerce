@@ -163,8 +163,8 @@ export const products: Product[] = [
     name: "Conjunto Pérolas Clássico",
     price: 4590.0,
     images: [
-      "https://images.unsplash.com/photo-1515562141589-67f0d569b534?w=800&q=80",
       "https://images.unsplash.com/photo-1601121141418-c1a0e49ac241?w=800&q=80",
+      "https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=800&q=80",
     ],
     sizes: ["Único"],
     colors: [
