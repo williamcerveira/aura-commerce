@@ -1,9 +1,8 @@
 import { useParams, Link } from "react-router-dom";
 import { getProductById } from "@/data/products";
 import { useCartStore } from "@/store/cart";
-import { useWishlistStore } from "@/store/wishlist";
 import { useState } from "react";
-import { Heart, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import Footer from "@/components/Footer";
 
 export default function ProductDetail() {
@@ -11,7 +10,7 @@ export default function ProductDetail() {
   const product = getProductById(id || "");
   const addItem = useCartStore((s) => s.addItem);
   const openCart = useCartStore((s) => s.openCart);
-  const { toggle, has } = useWishlistStore();
+
 
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -45,7 +44,7 @@ export default function ProductDetail() {
     openCart();
   };
 
-  const isFav = has(product.id);
+
 
   const accordions = [
     { key: "desc", label: "Detalhes da Peça", content: product.details },
@@ -84,9 +83,8 @@ export default function ProductDetail() {
                   <button
                     key={i}
                     onClick={() => setActiveImage(i)}
-                    className={`w-20 aspect-square overflow-hidden border-2 transition-colors ${
-                      activeImage === i ? "border-foreground" : "border-transparent"
-                    }`}
+                    className={`w-20 aspect-square overflow-hidden border-2 transition-colors ${activeImage === i ? "border-foreground" : "border-transparent"
+                      }`}
                   >
                     <img src={img} alt="" className="h-full w-full object-cover" />
                   </button>
@@ -123,9 +121,8 @@ export default function ProductDetail() {
                   <button
                     key={c.name}
                     onClick={() => setSelectedColor(c.name)}
-                    className={`w-8 h-8 rounded-full border-2 transition-all ${
-                      selectedColor === c.name ? "border-foreground scale-110" : "border-border"
-                    }`}
+                    className={`w-8 h-8 rounded-full border-2 transition-all ${selectedColor === c.name ? "border-foreground scale-110" : "border-border"
+                      }`}
                     style={{ backgroundColor: c.hex }}
                     aria-label={c.name}
                     title={c.name}
@@ -148,11 +145,10 @@ export default function ProductDetail() {
                   <button
                     key={s}
                     onClick={() => setSelectedSize(s)}
-                    className={`min-w-[3rem] border px-4 py-2.5 text-xs tracking-wider transition-colors ${
-                      selectedSize === s
+                    className={`min-w-[3rem] border px-4 py-2.5 text-xs tracking-wider transition-colors ${selectedSize === s
                         ? "border-primary bg-primary text-primary-foreground"
                         : "border-border hover:border-foreground"
-                    }`}
+                      }`}
                   >
                     {s}
                   </button>
@@ -164,16 +160,9 @@ export default function ProductDetail() {
               <button
                 onClick={handleAddToCart}
                 disabled={!selectedSize || !selectedColor}
-                className="flex-1 bg-primary text-primary-foreground py-3.5 text-sm font-semibold tracking-[0.2em] uppercase transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-full bg-primary text-primary-foreground py-3.5 text-sm font-semibold tracking-[0.2em] uppercase transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Adicionar ao Carrinho
-              </button>
-              <button
-                onClick={() => toggle(product.id)}
-                className="border border-border p-3.5 transition-colors hover:border-foreground"
-                aria-label={isFav ? "Remover dos favoritos" : "Favoritar"}
-              >
-                <Heart size={20} fill={isFav ? "currentColor" : "none"} />
               </button>
             </div>
 

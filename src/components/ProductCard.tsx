@@ -1,15 +1,11 @@
-import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Product } from "@/data/products";
-import { useWishlistStore } from "@/store/wishlist";
 
 interface Props {
   product: Product;
 }
 
 export default function ProductCard({ product }: Props) {
-  const { toggle, has } = useWishlistStore();
-  const isFav = has(product.id);
   const hasSecondImage = product.images.length > 1;
 
   const formatPrice = (v: number) =>
@@ -24,9 +20,8 @@ export default function ProductCard({ product }: Props) {
         <img
           src={product.images[0]}
           alt={product.name}
-          className={`aspect-square w-full object-cover transition-opacity duration-500 ${
-            hasSecondImage ? "group-hover:opacity-0" : "group-hover:scale-105 transition-transform"
-          }`}
+          className={`aspect-square w-full object-cover transition-opacity duration-500 ${hasSecondImage ? "group-hover:opacity-0" : "group-hover:scale-105 transition-transform"
+            }`}
           loading="lazy"
         />
         {hasSecondImage && (
@@ -48,13 +43,6 @@ export default function ProductCard({ product }: Props) {
           </span>
         )}
       </Link>
-      <button
-        onClick={() => toggle(product.id)}
-        className="absolute top-3 right-3 p-1.5 bg-background/80 backdrop-blur-sm transition-colors z-10"
-        aria-label={isFav ? "Remover dos favoritos" : "Adicionar aos favoritos"}
-      >
-        <Heart size={16} fill={isFav ? "currentColor" : "none"} />
-      </button>
       <div className="mt-3 space-y-1">
         <Link to={`/produto/${product.id}`}>
           <h3 className="text-sm font-medium leading-tight">{product.name}</h3>

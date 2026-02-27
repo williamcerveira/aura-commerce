@@ -1,4 +1,5 @@
 import { Instagram, Facebook } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
 export default function Footer() {
@@ -37,10 +38,10 @@ export default function Footer() {
           <div>
             <h3 className="text-xs font-semibold tracking-[0.2em] uppercase mb-4">Institucional</h3>
             <ul className="space-y-2.5 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-foreground transition-colors">Sobre Nós</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Nossas Joias</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Certificações</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Contato</a></li>
+              <li><Link to="/sobre" className="hover:text-foreground transition-colors">Sobre Nós</Link></li>
+              <li><Link to="/catalogo" className="hover:text-foreground transition-colors">Nossas Joias</Link></li>
+              <li><Link to="/sobre" className="hover:text-foreground transition-colors">Certificações</Link></li>
+              <li><Link to="/contato" className="hover:text-foreground transition-colors">Contato</Link></li>
             </ul>
           </div>
 

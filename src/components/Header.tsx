@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Search, Heart, ShoppingBag, Menu, X } from "lucide-react";
+import { Search, ShoppingBag, Menu, X } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { useState } from "react";
 
@@ -10,6 +10,8 @@ const navLinks = [
   { label: "Brincos", to: "/catalogo?category=brincos" },
   { label: "Pulseiras", to: "/catalogo?category=pulseiras" },
   { label: "Promoções", to: "/catalogo?filter=sale" },
+  { label: "Sobre", to: "/sobre" },
+  { label: "Contato", to: "/contato" },
 ];
 
 export default function Header() {
